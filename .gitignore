@@ -1,0 +1,14 @@
+# Emacs backup files.
+*~
+
+# Build process output files.
+src/obj/
+src/bin/
+test/obj/
+test/bin/
+
+# NPM packages.
+
+# Anything containing .DS_Store
+.DS_Store
+
