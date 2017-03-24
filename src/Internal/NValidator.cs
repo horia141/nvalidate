@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NValidate
+namespace NValidate.Internal
 {
     public class NValidator
     {

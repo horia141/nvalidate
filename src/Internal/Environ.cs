@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace NValidate
+namespace NValidate.Internal
 {
     public abstract class Environ
     {

@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Linq;
 
-namespace NValidate
+namespace NValidate.Internal
 {
     /// <summary>
     /// Project according to a given projector.

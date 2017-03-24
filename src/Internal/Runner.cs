@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading;
 
 
-namespace NValidate
+namespace NValidate.Internal
 {
     class Runner
     {

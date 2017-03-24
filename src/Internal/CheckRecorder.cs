@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace NValidate
+namespace NValidate.Internal
 {
     class CheckRecorder
     {

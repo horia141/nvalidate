@@ -1,7 +1,7 @@
 using System;
 
 
-namespace NValidate
+namespace NValidate.Internal
 {
     public interface Projector
     {

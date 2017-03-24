@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Linq;
 
-namespace NValidate
+namespace NValidate.Internal
 {
     /// <summary>
     /// Marks classes which hold validators. Similar to TestFixtureAttribute from NUnit.

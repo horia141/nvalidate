@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 
 
-namespace NValidate
+namespace NValidate.Internal
 {
     public enum GroupStatus
     {

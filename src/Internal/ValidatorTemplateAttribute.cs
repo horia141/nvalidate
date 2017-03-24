@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Linq;
 
-namespace NValidate
+namespace NValidate.Internal
 {
     /// <summary>
     /// Marks a method which performs some validation. Similar to TestAttribute from NUnit.

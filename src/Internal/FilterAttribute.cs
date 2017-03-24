@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Linq;
 
-namespace NValidate
+namespace NValidate.Internal
 {
     /// <summary>
     /// Filter the results of a ForEachXAttribute.
