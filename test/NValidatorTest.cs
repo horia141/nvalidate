@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-using NValidate;
+using NValidate.Internal;
 
 namespace NValidate.Tests
 {
