@@ -2,6 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
+    <PackageId>NValidate</PackageId>
+    <PackageVersion>0.0.0</PackageVersion>
+    <Authors>Horia Coman</Authors>
+    <Owners>Horia Coman</Owners>
+    <Title>NValidate</Title>
+    <Description>Business logic validation library</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright 2017 (c) StackExchange Inc</Copyright>
+    <PackageTags>csharp validation business-logic nunit dotnet-framework</PackageTags>
+    <PackageLicenseUrl>https://github.com/horia141/nvalidate/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/horia141/nvalidate</PackageProjectUrl>
+    <PackageRepositoryUrl>https://github.com/horia141/nvalidate</PackageRepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <DocumentationFile>out.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
