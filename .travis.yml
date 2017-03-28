@@ -21,4 +21,4 @@ deploy:
   script: ./tools/tonuget.sh ${NUGET_API_KEY}
   on:
     branch: master
-    tags: false
+    tags: true
