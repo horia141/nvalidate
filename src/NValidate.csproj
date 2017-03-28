@@ -15,7 +15,7 @@
     <PackageProjectUrl>https://github.com/horia141/nvalidate</PackageProjectUrl>
     <PackageRepositoryUrl>https://github.com/horia141/nvalidate</PackageRepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <DocumentationFile>out.xml</DocumentationFile>
+    <DocumentationFile>NValidate.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
