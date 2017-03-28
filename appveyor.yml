@@ -10,12 +10,14 @@ test_script: dotnet test test/NValidate.Tests.csproj
 after_test: dotnet pack src/NValidate.csproj --configuration Release
 
 artifacts:
-- path: ./src/bin/Any CPU/Release/NValidate.0.0.4.nupkg
+- path: ./src/bin/Any CPU/Release/NValidate.*.nupkg
   name: NValidate
 
-# deploy:
-# - provider: NuGet
-#   api_key:
-#     secure: BUsLevk5w2SaTOUbPd6mTgPrIQ3nFJ8oUH6RSr4aMidhBWo11gSl5v37Lk1vMX7m
-#   skip_symbols: true
-#   artifact: src/bin/Release/NValidate.*.nupkg
+deploy:
+- provider: NuGet
+  api_key:
+    secure: BUsLevk5w2SaTOUbPd6mTgPrIQ3nFJ8oUH6RSr4aMidhBWo11gSl5v37Lk1vMX7m
+  skip_symbols: true
+  artifact: NValidate
+  on:
+    appveyor_repo_tag: true
