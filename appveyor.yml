@@ -1,0 +1,17 @@
+configuration:
+  - Release
+platform: Any CPU
+
+environment:
+  NUGET_API_KEY:
+    secure: BUsLevk5w2SaTOUbPd6mTgPrIQ3nFJ8oUH6RSr4aMidhBWo11gSl5v37Lk1vMX7m
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+before_build:
+- dotnet restore
+
+test_script:
+- dotnet test test/NValidate.Tests.csproj
+
+cache:
+- '%USERPROFILE%\.nuget\packages'
