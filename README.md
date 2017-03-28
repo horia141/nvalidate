@@ -1,4 +1,4 @@
-# NValidate
+# NValidate [![Build Status](https://travis-ci.org/horia141/nvalidate.svg?branch=master)](https://travis-ci.org/horia141/nvalidate)
 
 _Danger_: rough draft ahead.
 
