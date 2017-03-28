@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 
 
-namespace NValidate.Internal
+namespace NValidate
 {
-    class CheckRecorder
+    public class CheckRecorder
     {
         GroupStatus _status;
         List<CheckResult> _results;

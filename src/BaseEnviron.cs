@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace NValidate.Internal
+namespace NValidate
 {
     public class BaseEnviron : Environ
     {

@@ -2,13 +2,13 @@ using System;
 using System.Reflection;
 using System.Linq;
 
-namespace NValidate.Internal
+namespace NValidate
 {
     /// <summary>
     /// Filter the results of a ForEachXAttribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple=true)]
-    class FilterAttribute : Attribute
+    public class FilterAttribute : Attribute
     {
         Type _filterInfo;
         MethodInfo _filterMethodInfo;

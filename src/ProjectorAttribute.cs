@@ -2,13 +2,13 @@ using System;
 using System.Reflection;
 using System.Linq;
 
-namespace NValidate.Internal
+namespace NValidate
 {
     /// <summary>
     /// Project according to a given projector.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
-    class ProjectorAttribute : Attribute
+    public class ProjectorAttribute : Attribute
     {
         Type _projectorInfo;
         MethodInfo _getNameMethodInfo;

@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Threading;
 
 
-namespace NValidate.Internal
+namespace NValidate
 {
-    class Runner
+    public class Runner
     {
         DateTime _dateToRun;
         Environ _environ;

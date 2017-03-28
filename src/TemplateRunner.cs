@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading;
 
 
-namespace NValidate.Internal
+namespace NValidate
 {
     class TemplateRunner
     {

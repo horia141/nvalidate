@@ -1,7 +1,7 @@
 using System;
 
 
-namespace NValidate.Internal
+namespace NValidate
 {
     /// <summary>
     /// Exception thrown when a critical condition is not satisfied.

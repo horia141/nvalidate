@@ -1,4 +1,4 @@
-namespace NValidate.Internal
+namespace NValidate
 {
     public interface Filter
     {
