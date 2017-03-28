@@ -1,0 +1,11 @@
+language: csharp
+mono: none
+dotnet: 1.0.1
+os: osx
+solution: NValidate.sln
+
+install:
+- ulimit -n 512
+- dotnet restore
+
+script: dotnet test test/NValidate.Tests.csproj
