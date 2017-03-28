@@ -10,7 +10,7 @@ test_script: dotnet test test/NValidate.Tests.csproj
 after_test: dotnet pack src/NValidate.csproj --configuration Release
 
 artifacts:
-- path: ./src/bin/Release/NValidate.0.0.4.nupkg
+- path: ./src/bin/Any CPU/Release/NValidate.0.0.4.nupkg
   name: NValidate
 
 # deploy:
