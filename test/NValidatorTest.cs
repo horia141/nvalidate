@@ -1,16 +1,17 @@
 using System;
-using Xunit;
+using NUnit.Framework;
 
 using NValidate;
 
 namespace NValidate.Tests
 {
+    [TestFixture]
     public class NValidatorTest
     {
-        [Fact]
+        [Test]
         public void AddFoo()
         {
-	    Assert.Equal(NValidator.AddFoo("bar"), "bar-foo");
+	    Assert.That(NValidator.AddFoo("bar"), Is.EqualTo("bar-foo"));
         }
     }
 }

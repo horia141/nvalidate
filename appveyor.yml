@@ -6,8 +6,8 @@ environment:
 
 before_build: dotnet restore
 build_script: dotnet build --configuration Release
-test_script: dotnet test test/NValidate.Tests.csproj
-after_test: dotnet pack src/NValidate.csproj --configuration Release
+test_script: dotnet run --configuration Release --project test\NValidate.Tests.csproj
+after_test: dotnet pack src\NValidate.csproj --configuration Release
 
 artifacts:
 - path: '**\*.nupkg'
