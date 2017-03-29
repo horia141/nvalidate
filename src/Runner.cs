@@ -19,10 +19,8 @@ namespace NValidate
             _environ = environ;
         }
 
-        public ValidatorRunResult Run()
+        public ValidatorRunResult Run(Assembly currentAssembly)
         {
-            var currentAssembly = typeof(Runner).GetTypeInfo().Assembly;
-
             var validatorRunResult = new ValidatorRunResult();
 
             validatorRunResult.RunDate = _dateToRun;
