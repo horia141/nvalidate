@@ -1,4 +1,4 @@
-using System;
+Ausing System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -42,6 +42,7 @@ namespace NValidate
 
             ProjectorAttribute projector = _validatorTemplateInfo.GetCustomAttribute<ProjectorAttribute>() ?? _s_defaultProjector;
             IEnumerable<FilterAttribute> filters = _validatorTemplateInfo.GetCustomAttributes<FilterAttribute>();
+	    ISet<object> exceptionsSet = _validatorTemplateInfo.GetCustomAttribute<ExceptionsAttribute>()?.GetExceptionsSet();
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -52,6 +53,9 @@ namespace NValidate
                 try
                 {
                     if (!filters.All(fa => fa.IsAllowed(env)))
+                        return;
+
+                    if (exceptionsSet != null && projector.IsException(exceptionsSet, env))
                         return;
 
                     var checkRecorder = new CheckRecorder(validatorTemplateResult.ShouldRecord);

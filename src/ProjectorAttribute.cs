@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
@@ -12,6 +13,7 @@ namespace NValidate
     {
         Type _projectorInfo;
         MethodInfo _getNameMethodInfo;
+        MethodInfo _isExceptionMethodInfo;
         MethodInfo _projectMethodInfo;
         Projector _projectorObject;
 
@@ -28,7 +30,14 @@ namespace NValidate
             if (_getNameMethodInfo == null)
                 throw new ArgumentException("Projector must have a GetName method");
             if (_getNameMethodInfo.ReturnType != typeof(string))
-                throw new ArgumentException("Project method must return string");
+                throw new ArgumentException("getName method must return string");
+
+            _isExceptionMethodInfo = _projectorInfo.GetMethod("IsException", BindingFlags.Public | BindingFlags.Instance);
+
+            if (_isExceptionMethodInfo == null)
+                throw new ArgumentException("Projector must have a IsException method");
+            if (_isExceptionMethodInfo.ReturnType != typeof(bool))
+                throw new ArgumentException("isException method must return boolean");
 
             _projectMethodInfo = _projectorInfo.GetMethod("Project", BindingFlags.Public | BindingFlags.Instance);
 
@@ -54,6 +63,12 @@ namespace NValidate
         public string GetName(Environ environ)
         {
             return (string)_getNameMethodInfo.Invoke(_projectorObject, environ.ResolveParameters(_getNameMethodInfo.GetParameters()));
+        }
+
+
+        public bool IsException(ISet<object> exceptionsSet, Environ environ)
+        {
+            return (bool)_isExceptionMethodInfo.Invoke(_projectorObject, environ.Add(exceptionsSet).ResolveParameters(_getNameMethodInfo.GetParameters()));
         }
 
 
