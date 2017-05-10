@@ -119,7 +119,7 @@ namespace NValidate
 	    {
                 projector.Project(environ);
 	    }
-	    catch (OperationCanceledException)
+	    catch (TargetInvocationException e) when (e.InnerException is OperationCanceledException)
 	    {
 		// There was an error with executing an instance's code. The possibly parallel
 		// execution of instance validators was stopped. Nothing to do here, as the error
