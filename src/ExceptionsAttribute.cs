@@ -20,7 +20,7 @@ namespace NValidate
 	}
 	
 
-        public ISet<object> GetExceptionsSet() => new HashSet<object>(_exceptionsSet);
+        public HashSet<object> GetExceptionsSet() => new HashSet<object>(_exceptionsSet);
 	
 	
         public static bool HasAttribute(MethodInfo methodInfo) => methodInfo.GetCustomAttributes(typeof(ExceptionsAttribute), true).Count() > 0;

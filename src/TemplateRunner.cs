@@ -42,7 +42,7 @@ namespace NValidate
 
             ProjectorAttribute projector = _validatorTemplateInfo.GetCustomAttribute<ProjectorAttribute>() ?? _s_defaultProjector;
             IEnumerable<FilterAttribute> filters = _validatorTemplateInfo.GetCustomAttributes<FilterAttribute>();
-	    ISet<object> exceptionsSet = _validatorTemplateInfo.GetCustomAttribute<ExceptionsAttribute>()?.GetExceptionsSet();
+            HashSet<object> exceptionsSet = _validatorTemplateInfo.GetCustomAttribute<ExceptionsAttribute>()?.GetExceptionsSet();
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
