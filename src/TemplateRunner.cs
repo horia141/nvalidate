@@ -126,7 +126,7 @@ namespace NValidate
 		// is already saved globally.
 	    }
 
-            if (validatorTemplateResult.InstanceResults.Count == 0 && validatorTemplateResult.Error == null)
+            if (validatorTemplateResult.InstanceResults?.Count == 0 && validatorTemplateResult.Error == null)
                 validatorTemplateResult.Status = GroupStatus.Success;
             else if (validatorTemplateResult.Error != null)
                 validatorTemplateResult.Status = GroupStatus.Error;
