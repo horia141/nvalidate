@@ -115,7 +115,16 @@ namespace NValidate
             }));
             environ = environ.Add(environ); // This is the base environment. It should be accessible downstream.
 
-            projector.Project(environ);
+	    try
+	    {
+                projector.Project(environ);
+	    }
+	    catch (OperationCanceledException)
+	    {
+		// There was an error with executing an instance's code. The possibly parallel
+		// execution of instance validators was stopped. Nothing to do here, as the error
+		// is already saved globally.
+	    }
 
             if (validatorTemplateResult.InstanceResults.Count == 0 && validatorTemplateResult.Error == null)
                 validatorTemplateResult.Status = GroupStatus.Success;
