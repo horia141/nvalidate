@@ -275,7 +275,7 @@ namespace NValidate
 
         public void SetError(Exception error)
         {
-            Interlocked.CompareExchange<Exception>(ref _error, null, error);
+            Interlocked.CompareExchange<Exception>(ref _error, error, null);
         }
 
 
