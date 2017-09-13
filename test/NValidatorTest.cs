@@ -1,7 +1,5 @@
-using System;
 using NUnit.Framework;
 
-using NValidate;
 
 namespace NValidate.Tests
 {
@@ -11,7 +9,7 @@ namespace NValidate.Tests
         [Test]
         public void AddFoo()
         {
-	    Assert.That(NValidator.AddFoo("bar"), Is.EqualTo("bar-foo"));
+	        Assert.That(NValidator.AddFoo("bar"), Is.EqualTo("bar-foo"));
         }
     }
 }

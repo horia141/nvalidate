@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NValidate
+﻿namespace NValidate
 {
     public class NValidator
     {
