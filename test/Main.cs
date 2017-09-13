@@ -7,8 +7,11 @@ namespace NValidate.Tests
     {
         public static int Main(string[] args)
 	    {
-	        return new AutoRun().Execute(args);
-            Console.WriteLine("Here");
-	    }
+	        new AutoRun().Execute(args);
+#if DEBUG
+            Console.ReadKey();
+#endif
+            return 0;
+        }
     }
 }

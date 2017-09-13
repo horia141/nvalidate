@@ -64,7 +64,7 @@ namespace NValidate
 
         public BaseEnvironBuilder AddModelExtractor<T>(Func<Environ, object> modelExtractor)
         {
-            _models[typeof(T)] = modelExtractor;
+            _modelExtractors[typeof(T)] = modelExtractor;
             return this;
         }
 
