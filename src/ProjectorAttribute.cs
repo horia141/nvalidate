@@ -69,7 +69,7 @@ namespace NValidate
 
         public bool IsException(HashSet<object> exceptionsSet, Environ environ)
         {
-            return (bool)_isExceptionMethodInfo.Invoke(_projectorObject, environ.Add(exceptionsSet).ResolveParameters(_isExceptionMethodInfo.GetParameters()));
+            return (bool)_isExceptionMethodInfo.Invoke(_projectorObject, environ.Extend(exceptionsSet).ResolveParameters(_isExceptionMethodInfo.GetParameters()));
         }
 
 

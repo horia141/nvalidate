@@ -48,6 +48,27 @@ namespace NValidate.Tests
         }
 
         [Test]
+        public void Extend()
+        {
+            var environ = new EnvironBuilder().Build();
+
+            var newEnviron = environ.Extend<string>("hello");
+
+            Assert.That(newEnviron.Get<string>(), Is.EqualTo("hello"));
+        }
+
+        [Test]
+        public void ExtendProducesANewObject()
+        {
+            var environ = new EnvironBuilder().Build();
+
+            var newEnviron = environ.Extend<string>("hello");
+
+            Assert.That(newEnviron, Is.Not.SameAs(environ));
+            Assert.That(environ.Get<string>(), Is.Null);
+        }
+
+        [Test]
         public void ResolveParameters()
         {
             Func<string, int, string> testFn = (string foo, int bar) => $"{foo}-{bar}";

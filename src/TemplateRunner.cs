@@ -47,8 +47,8 @@ namespace NValidate
             CancellationTokenSource cts = new CancellationTokenSource();
 
             var environ = _environ
-                .Add(cts)
-                .Add((Action<Environ>)(env =>
+                .Extend(cts)
+                .Extend((Action<Environ>)(env =>
             {
                 try
                 {
@@ -62,7 +62,7 @@ namespace NValidate
 
                     try
                     {
-                        _validatorTemplateInfo.Invoke(validatorFixture, env.Add(checkRecorder).ResolveParameters(_validatorTemplateInfo.GetParameters()));
+                        _validatorTemplateInfo.Invoke(validatorFixture, env.Extend(checkRecorder).ResolveParameters(_validatorTemplateInfo.GetParameters()));
 
                         if (checkRecorder.IsSuccess)
                         {
@@ -113,7 +113,7 @@ namespace NValidate
                     cts.Cancel();
                 }
             }));
-            environ = environ.Add(environ); // This is the base environment. It should be accessible downstream.
+            environ = environ.Extend(environ); // This is the base environment. It should be accessible downstream.
 
 	    try
 	    {
