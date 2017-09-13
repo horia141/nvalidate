@@ -6,11 +6,41 @@ namespace NValidate
 {
     public class BaseEnviron : Environ
     {
+        public class Builder
+        {
+            readonly Dictionary<Type, Func<Environ, object>> _modelExtractors;
+            readonly Dictionary<Type, object> _models;
+
+            public Builder()
+            {
+                _modelExtractors = new Dictionary<Type, Func<Environ, object>>();
+                _models = new Dictionary<Type, object>();
+            }
+
+            public Builder AddModel(object model)
+            {
+                _models[model.GetType()] = model;
+                return this;
+            }
+
+            public Builder AddModelExtractor<T>(Func<Environ, object> modelExtractor)
+            {
+                _modelExtractors[typeof(T)] = modelExtractor;
+                return this;
+            }
+
+            public BaseEnviron Build()
+            {
+                return new BaseEnviron(_modelExtractors, _models);
+            }
+        }
+
+
         readonly Dictionary<Type, Func<Environ, object>> _modelExtractors;
         readonly Dictionary<Type, object> _models;
 
 
-        public BaseEnviron(Dictionary<Type, Func<Environ, object>> modelExtractors, Dictionary<Type, object> models)
+        BaseEnviron(Dictionary<Type, Func<Environ, object>> modelExtractors, Dictionary<Type, object> models)
         {
             _modelExtractors = modelExtractors;
             _models = models;
@@ -42,35 +72,6 @@ namespace NValidate
             {
                 return null;
             }
-        }
-    }
-
-    public class BaseEnvironBuilder
-    {
-        readonly Dictionary<Type, Func<Environ, object>> _modelExtractors;
-        readonly Dictionary<Type, object> _models;
-
-        public BaseEnvironBuilder()
-        {
-            _modelExtractors = new Dictionary<Type, Func<Environ, object>>();
-            _models = new Dictionary<Type, object>();
-        }
-
-        public BaseEnvironBuilder AddModel(object model)
-        {
-            _models[model.GetType()] = model;
-            return this;
-        }
-
-        public BaseEnvironBuilder AddModelExtractor<T>(Func<Environ, object> modelExtractor)
-        {
-            _modelExtractors[typeof(T)] = modelExtractor;
-            return this;
-        }
-
-        public BaseEnviron Build()
-        {
-            return new BaseEnviron(_modelExtractors, _models);
         }
     }
 }
