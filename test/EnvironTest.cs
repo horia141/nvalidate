@@ -4,27 +4,19 @@ using System;
 namespace NValidate.Tests
 {
     [TestFixture]
-    public class BaseEnvironTest
+    public class EnvironTest
     {
-        [Test]
-        public void AddProducesALinkedEnviron()
-        {
-            var baseEnviron = new BaseEnviron.Builder().Build();
-            var newEnviron = baseEnviron.Add("hello");
-            Assert.That(newEnviron, Is.AssignableTo(typeof(LinkedEnviron)));
-        }
-
         [Test]
         public void GetByType()
         {
-            var environ = new BaseEnviron.Builder().AddModel("hello").Build();
+            var environ = new EnvironBuilder().AddModel("hello").Build();
             Assert.That(environ.GetByType(typeof(string)), Is.EqualTo("hello"));
         }
 
         [Test]
         public void GetByTypeMoreComplex()
         {
-            var environ = new BaseEnviron.Builder()
+            var environ = new EnvironBuilder()
                 .AddModel("hello")
                 .AddModel(10)
                 .AddModel(Tuple.Create("hello", 10))
@@ -38,7 +30,7 @@ namespace NValidate.Tests
         [Test]
         public void GetByTypeWithExtractor()
         {
-            var environ = new BaseEnviron.Builder()
+            var environ = new EnvironBuilder()
                 .AddModel(true)
                 .AddModel(10)
                 .AddModelExtractor<string>((env) => $"{env.Get<bool>()}-{env.Get<int>()}")
@@ -50,7 +42,7 @@ namespace NValidate.Tests
         [Test]
         public void GetByTypeFails()
         {
-            var environ = new BaseEnviron.Builder().Build();
+            var environ = new EnvironBuilder().Build();
 
             Assert.That(environ.GetByType(typeof(string)), Is.Null);
         }
@@ -58,14 +50,14 @@ namespace NValidate.Tests
         [Test]
         public void Get()
         {
-            var environ = new BaseEnviron.Builder().AddModel("hello").Build();
+            var environ = new EnvironBuilder().AddModel("hello").Build();
             Assert.That(environ.Get<string>(), Is.EqualTo("hello"));
         }
 
         [Test]
         public void GetMoreComplex()
         {
-            var environ = new BaseEnviron.Builder()
+            var environ = new EnvironBuilder()
                 .AddModel("hello")
                 .AddModel(10)
                 .AddModel(Tuple.Create("hello", 10))
@@ -79,7 +71,7 @@ namespace NValidate.Tests
         [Test]
         public void GetWithExtractor()
         {
-            var environ = new BaseEnviron.Builder()
+            var environ = new EnvironBuilder()
                 .AddModel(true)
                 .AddModel(10)
                 .AddModelExtractor<string>((env) => $"{env.Get<bool>()}-{env.Get<int>()}")
@@ -91,7 +83,7 @@ namespace NValidate.Tests
         [Test]
         public void GetFails()
         {
-            var environ = new BaseEnviron.Builder().Build();
+            var environ = new EnvironBuilder().Build();
 
             Assert.That(environ.Get<string>(), Is.Null);
         }
@@ -100,7 +92,7 @@ namespace NValidate.Tests
         public void ResolveParameters()
         {
             Func<string, int, string> testFn = (string foo, int bar) => $"{foo}-{bar}";
-            var environ = new BaseEnviron.Builder()
+            var environ = new EnvironBuilder()
                 .AddModel("hello")
                 .AddModel(10)
                 .Build();
@@ -116,7 +108,7 @@ namespace NValidate.Tests
         public void ResolveParametersFails()
         {
             Func<string, int, string> testFn = (string foo, int bar) => $"{foo}-{bar}";
-            var environ = new BaseEnviron.Builder().Build();
+            var environ = new EnvironBuilder().Build();
 
             Assert.That(() => environ.ResolveParameters(testFn.Method.GetParameters()), Throws.Exception.With.Property("Message").EqualTo("Cannot translate parameter \"foo\""));
         }
