@@ -1,5 +1,5 @@
 using NUnitLite;
-
+using System;
 
 namespace NValidate.Tests
 {
@@ -8,6 +8,7 @@ namespace NValidate.Tests
         public static int Main(string[] args)
 	    {
 	        return new AutoRun().Execute(args);
+            Console.WriteLine("Here");
 	    }
     }
 }
