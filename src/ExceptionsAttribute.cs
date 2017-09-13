@@ -16,9 +16,9 @@ namespace NValidate
 
 
         public ExceptionsAttribute(params object[] exceptionsSet)
-	{
-	    _exceptionsSet = exceptionsSet;
-	}
+	    {
+	        _exceptionsSet = exceptionsSet;
+	    }
 	
 
         public HashSet<object> GetExceptionsSet() => new HashSet<object>(_exceptionsSet);
