@@ -43,8 +43,8 @@ namespace NValidate
         public T Get<T>() => (T)GetByType(typeof(T));
         public object[] ResolveParameters(ParameterInfo[] parameters) => parameters.Select(p => FillInParameter(p)).ToArray();
 
-        public abstract Environ Add(object entity);
-        public abstract object GetByType(Type type, Environ topEnviron = null);
+        internal abstract Environ Add(object entity);
+        internal abstract object GetByType(Type type, Environ topEnviron = null);
 
         private object FillInParameter(ParameterInfo parameter)
         {
@@ -68,12 +68,12 @@ namespace NValidate
             _models = models;
         }
 
-        public override Environ Add(object model)
+        internal override Environ Add(object model)
         {
             return new LinkedEnviron(model, this);
         }
 
-        public override object GetByType(Type type, Environ topEnviron = null)
+        internal override object GetByType(Type type, Environ topEnviron = null)
         {
             object result = null;
             _models.TryGetValue(type, out result);
@@ -108,12 +108,12 @@ namespace NValidate
             _previousEnviron = previousEnviron;
         }
 
-        public override Environ Add(object entity)
+        internal override Environ Add(object entity)
         {
             return new LinkedEnviron(entity, this);
         }
 
-        public override object GetByType(Type type, Environ topEnviron = null)
+        internal override object GetByType(Type type, Environ topEnviron = null)
         {
             if (type == _value.GetType())
                 return _value;

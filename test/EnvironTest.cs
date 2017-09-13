@@ -7,47 +7,6 @@ namespace NValidate.Tests
     public class EnvironTest
     {
         [Test]
-        public void GetByType()
-        {
-            var environ = new EnvironBuilder().AddModel("hello").Build();
-            Assert.That(environ.GetByType(typeof(string)), Is.EqualTo("hello"));
-        }
-
-        [Test]
-        public void GetByTypeMoreComplex()
-        {
-            var environ = new EnvironBuilder()
-                .AddModel("hello")
-                .AddModel(10)
-                .AddModel(Tuple.Create("hello", 10))
-                .Build();
-
-            Assert.That(environ.GetByType(typeof(string)), Is.EqualTo("hello"));
-            Assert.That(environ.GetByType(typeof(int)), Is.EqualTo(10));
-            Assert.That(environ.GetByType(typeof(Tuple<string, int>)), Is.EqualTo(Tuple.Create("hello", 10)));
-        }
-
-        [Test]
-        public void GetByTypeWithExtractor()
-        {
-            var environ = new EnvironBuilder()
-                .AddModel(true)
-                .AddModel(10)
-                .AddModelExtractor<string>((env) => $"{env.Get<bool>()}-{env.Get<int>()}")
-                .Build();
-
-            Assert.That(environ.GetByType(typeof(string)), Is.EqualTo("True-10"));
-        }
-
-        [Test]
-        public void GetByTypeFails()
-        {
-            var environ = new EnvironBuilder().Build();
-
-            Assert.That(environ.GetByType(typeof(string)), Is.Null);
-        }
-
-        [Test]
         public void Get()
         {
             var environ = new EnvironBuilder().AddModel("hello").Build();
