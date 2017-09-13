@@ -8,30 +8,30 @@ namespace NValidate
 {
     public class EnvironBuilder
     {
-        readonly Dictionary<Type, Func<Environ, object>> _modelExtractors;
-        readonly Dictionary<Type, object> _models;
+        readonly Dictionary<Type, object> _entities;
+        readonly Dictionary<Type, Func<Environ, object>> _entityExtractors;
 
         public EnvironBuilder()
         {
-            _modelExtractors = new Dictionary<Type, Func<Environ, object>>();
-            _models = new Dictionary<Type, object>();
+            _entities = new Dictionary<Type, object>();
+            _entityExtractors = new Dictionary<Type, Func<Environ, object>>();
         }
 
-        public EnvironBuilder AddModel(object model)
+        public EnvironBuilder Add<T>(T entity)
         {
-            _models[model.GetType()] = model;
+            _entities[typeof(T)] = entity;
             return this;
         }
 
-        public EnvironBuilder AddModelExtractor<T>(Func<Environ, object> modelExtractor)
+        public EnvironBuilder AddExtractor<T>(Func<Environ, object> extractor)
         {
-            _modelExtractors[typeof(T)] = modelExtractor;
+            _entityExtractors[typeof(T)] = extractor;
             return this;
         }
 
         public Environ Build()
         {
-            return new BaseEnviron(_modelExtractors, _models);
+            return new BaseEnviron(_entities, _entityExtractors);
         }
     }
 
@@ -59,28 +59,28 @@ namespace NValidate
     
     class BaseEnviron : Environ
     {
-        private readonly Dictionary<Type, Func<Environ, object>> _modelExtractors;
-        private readonly Dictionary<Type, object> _models;
+        private readonly Dictionary<Type, object> _entities;
+        private readonly Dictionary<Type, Func<Environ, object>> _entityExtractors;
 
-        public BaseEnviron(Dictionary<Type, Func<Environ, object>> modelExtractors, Dictionary<Type, object> models)
+        public BaseEnviron(Dictionary<Type, object> entities, Dictionary<Type, Func<Environ, object>> entityExtractors)
         {
-            _modelExtractors = modelExtractors;
-            _models = models;
+            _entities = entities;
+            _entityExtractors = entityExtractors;
         }
 
         internal override object GetByType(Type type, Environ topEnviron = null)
         {
             object result = null;
-            _models.TryGetValue(type, out result);
+            _entities.TryGetValue(type, out result);
 
             if (result != null)
             {
                 return result;
             }
-            else if (_modelExtractors != null)
+            else if (_entityExtractors != null)
             {
                 Func<Environ, object> extractor = null;
-                if (!_modelExtractors.TryGetValue(type, out extractor))
+                if (!_entityExtractors.TryGetValue(type, out extractor))
                     return null;
 
                 return extractor(topEnviron ?? this);

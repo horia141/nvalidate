@@ -9,7 +9,7 @@ namespace NValidate.Tests
         [Test]
         public void Get()
         {
-            var environ = new EnvironBuilder().AddModel("hello").Build();
+            var environ = new EnvironBuilder().Add("hello").Build();
             Assert.That(environ.Get<string>(), Is.EqualTo("hello"));
         }
 
@@ -17,9 +17,9 @@ namespace NValidate.Tests
         public void GetMoreComplex()
         {
             var environ = new EnvironBuilder()
-                .AddModel("hello")
-                .AddModel(10)
-                .AddModel(Tuple.Create("hello", 10))
+                .Add("hello")
+                .Add(10)
+                .Add(Tuple.Create("hello", 10))
                 .Build();
 
             Assert.That(environ.Get<string>(), Is.EqualTo("hello"));
@@ -31,9 +31,9 @@ namespace NValidate.Tests
         public void GetWithExtractor()
         {
             var environ = new EnvironBuilder()
-                .AddModel(true)
-                .AddModel(10)
-                .AddModelExtractor<string>((env) => $"{env.Get<bool>()}-{env.Get<int>()}")
+                .Add(true)
+                .Add(10)
+                .AddExtractor<string>((env) => $"{env.Get<bool>()}-{env.Get<int>()}")
                 .Build();
 
             Assert.That(environ.Get<string>(), Is.EqualTo("True-10"));
@@ -73,8 +73,8 @@ namespace NValidate.Tests
         {
             Func<string, int, string> testFn = (string foo, int bar) => $"{foo}-{bar}";
             var environ = new EnvironBuilder()
-                .AddModel("hello")
-                .AddModel(10)
+                .Add("hello")
+                .Add(10)
                 .Build();
 
             var resolvedTestFnParams = environ.ResolveParameters(testFn.Method.GetParameters());
