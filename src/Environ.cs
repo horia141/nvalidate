@@ -8,24 +8,36 @@ namespace NValidate
 {
     public class EnvironBuilder
     {
-        readonly Dictionary<Type, object> _entities;
-        readonly Dictionary<Type, Func<Environ, object>> _entityExtractors;
+        readonly Dictionary<ValueTuple<Type, Type>, object> _entities;
+        readonly Dictionary<ValueTuple<Type, Type>, Func<Environ, object>> _entityExtractors;
 
         public EnvironBuilder()
         {
-            _entities = new Dictionary<Type, object>();
-            _entityExtractors = new Dictionary<Type, Func<Environ, object>>();
+            _entities = new Dictionary<ValueTuple<Type, Type>, object>();
+            _entityExtractors = new Dictionary<ValueTuple<Type, Type>, Func<Environ, object>>();
         }
 
         public EnvironBuilder Add<T>(T entity)
         {
-            _entities[typeof(T)] = entity;
+            _entities[(null, typeof(T))] = entity;
+            return this;
+        }
+
+        public EnvironBuilder Add<A, T>(T entity) where A : Attribute 
+        {
+            _entities[(typeof(A), typeof(T))] = entity;
             return this;
         }
 
         public EnvironBuilder AddExtractor<T>(Func<Environ, object> extractor)
         {
-            _entityExtractors[typeof(T)] = extractor;
+            _entityExtractors[(null, typeof(T))] = extractor;
+            return this;
+        }
+
+        public EnvironBuilder AddExtractor<A, T>(Func<Environ, object> extractor) where A : Attribute
+        {
+            _entityExtractors[(typeof(A), typeof(T))] = extractor;
             return this;
         }
 
@@ -39,16 +51,35 @@ namespace NValidate
     {
         protected Environ() { }
 
-        public T Get<T>() => (T)GetByType(typeof(T));
-        public Environ Extend<T>(T entity) => ExtendByType(typeof(T), entity);
+        public T Get<T>()
+        {
+            var result = GetByAttributeAndType(null, typeof(T));
+            if (result == null)
+                return default(T);
+            return (T)result;
+        }
+
+        public T Get<A, T>() where A : Attribute
+        {
+            var result = GetByAttributeAndType(typeof(A), typeof(T));
+            if (result == null)
+                return default(T);
+            return (T)result;
+        }
+
+        public Environ Extend<T>(T entity) => ExtendByAttributeAndType(null, typeof(T), entity);
+        public Environ Extend<A, T>(T entity) where A : Attribute => ExtendByAttributeAndType(typeof(A), typeof(T), entity);
         public object[] ResolveParameters(ParameterInfo[] parameters) => parameters.Select(p => FillInParameter(p)).ToArray();
 
-        internal abstract object GetByType(Type type, Environ topEnviron = null);
-        internal abstract Environ ExtendByType(Type type, object entity);
+        internal abstract object GetByAttributeAndType(Type attributeType, Type entityType, Environ topEnviron = null);
+        internal abstract Environ ExtendByAttributeAndType(Type attributeType, Type entityType, object entity);
 
         private object FillInParameter(ParameterInfo parameter)
         {
-            object result = GetByType(parameter.ParameterType);
+            Type attributeType = null;
+            if (parameter.CustomAttributes.Count() == 1)
+                attributeType = parameter.CustomAttributes.First().AttributeType;
+            object result = GetByAttributeAndType(attributeType, parameter.ParameterType);
 
             if (result != null)
                 return result;
@@ -59,19 +90,19 @@ namespace NValidate
     
     class BaseEnviron : Environ
     {
-        private readonly Dictionary<Type, object> _entities;
-        private readonly Dictionary<Type, Func<Environ, object>> _entityExtractors;
+        private readonly Dictionary<ValueTuple<Type, Type>, object> _entities;
+        private readonly Dictionary<ValueTuple<Type, Type>, Func<Environ, object>> _entityExtractors;
 
-        public BaseEnviron(Dictionary<Type, object> entities, Dictionary<Type, Func<Environ, object>> entityExtractors)
+        public BaseEnviron(Dictionary<ValueTuple<Type, Type>, object> entities, Dictionary<ValueTuple<Type, Type>, Func<Environ, object>> entityExtractors)
         {
             _entities = entities;
             _entityExtractors = entityExtractors;
         }
 
-        internal override object GetByType(Type type, Environ topEnviron = null)
+        internal override object GetByAttributeAndType(Type attributeType, Type entityType, Environ topEnviron = null)
         {
             object result = null;
-            _entities.TryGetValue(type, out result);
+            _entities.TryGetValue((attributeType, entityType), out result);
 
             if (result != null)
             {
@@ -80,7 +111,7 @@ namespace NValidate
             else if (_entityExtractors != null)
             {
                 Func<Environ, object> extractor = null;
-                if (!_entityExtractors.TryGetValue(type, out extractor))
+                if (!_entityExtractors.TryGetValue((attributeType, entityType), out extractor))
                     return null;
 
                 return extractor(topEnviron ?? this);
@@ -91,42 +122,44 @@ namespace NValidate
             }
         }
 
-        internal override Environ ExtendByType(Type type, object enitity)
+        internal override Environ ExtendByAttributeAndType(Type attributeType, Type entityType, object enitity)
         {
-            return new LinkedEnviron(type, enitity, this);
+            return new LinkedEnviron(attributeType, entityType, enitity, this);
         }
     }
 
     class LinkedEnviron : Environ
     {
-        private readonly Type _type;
+        private readonly Type _attributeType;
+        private readonly Type _entityType;
         private readonly object _entity;
         private readonly Environ _previousEnviron;
 
-        public LinkedEnviron(Type type, object value, Environ previousEnviron)
+        public LinkedEnviron(Type attributeType, Type entityType, object value, Environ previousEnviron)
         {
-            _type = type;
+            _attributeType = attributeType;
+            _entityType = entityType;
             _entity = value;
             _previousEnviron = previousEnviron;
         }
 
-        internal override object GetByType(Type type, Environ topEnviron = null)
+        internal override object GetByAttributeAndType(Type attributeType, Type entityType, Environ topEnviron = null)
         {
-            if (type == _type)
+            if (attributeType == _attributeType && entityType == _entityType)
                 return _entity;
 
-            if (type == typeof(Environ) && _entity.GetType() == typeof(LinkedEnviron))
+            if (entityType == typeof(Environ) && _entity.GetType() == typeof(LinkedEnviron))
                 return _entity;
 
             if (topEnviron == null)
-                return _previousEnviron.GetByType(type, this);
+                return _previousEnviron.GetByAttributeAndType(attributeType, entityType, this);
             else
-                return _previousEnviron.GetByType(type, topEnviron);
+                return _previousEnviron.GetByAttributeAndType(attributeType, entityType, topEnviron);
         }
 
-        internal override Environ ExtendByType(Type type, object entity)
+        internal override Environ ExtendByAttributeAndType(Type attributeType, Type entityType, object entity)
         {
-            return new LinkedEnviron(type, entity, this);
+            return new LinkedEnviron(attributeType, entityType, entity, this);
         }
     }
 }
