@@ -5,20 +5,52 @@ using System.Threading;
 
 namespace NValidate
 {
+    /// <summary>
+    /// The overall result of a set of checks.
+    /// </summary>
     public enum GroupStatus
     {
+        /// <summary>
+        /// All of the checks have been successfull.
+        /// </summary>
         Success = 0,
+        /// <summary>
+        /// The set of checks have been skipped.
+        /// </summary>
         Skipped = 1,
+        /// <summary>
+        /// At least one of the checks has failed, but none has errored.
+        /// </summary>
         Failure = 2,
+        /// <summary>
+        /// At least one of the checks has errored, and possibly some have failed.
+        /// </summary>
         Error = 3
     }
 
 
+    /// <summary>
+    /// The result of a single check.
+    /// </summary>
     public enum CheckStatus
     {
+        /// <summary>
+        /// The checked condition was met.
+        /// </summary>
         Success = 0,
+        /// <summary>
+        /// The checked condition was not met.
+        /// </summary>
         Failure = 1,
+        /// <summary>
+        /// The checked condition was not met. Furthermore, the failure means later checks in the instance
+        /// cannot be safely be made, so the whole process is stopped.
+        /// </summary>
         CriticalFailure = 2,
+        /// <summary>
+        /// The check on the condition was not performed. Usually because of a previous check ending in a
+        /// <see cref="CriticalFailure"/>.
+        /// </summary>
         NotRan = 3
     }
 
@@ -286,6 +318,9 @@ namespace NValidate
     }
 
 
+    /// <summary>
+    /// Results for a validator instance from a template.
+    /// </summary>
     public class ValidatorInstanceResult
     {
         /// <summary>
@@ -309,9 +344,16 @@ namespace NValidate
         public Exception Error { get; set; } // Contains the error which was raised. Can be null.
 
 
+        /// <summary>
+        /// Whether the instasnce was skipped or not.
+        /// </summary>
         public bool Skipped => Status == GroupStatus.Skipped;
     }
 
+
+    /// <summary>
+    /// Results for a single check in an instance.
+    /// </summary>
     public class CheckResult
     {
         /// <summary>
