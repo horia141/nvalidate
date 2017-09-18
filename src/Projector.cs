@@ -7,7 +7,7 @@ namespace NValidate
     public interface Projector
     {
         // string GetName(... object[] args);
-	// bool IsException(HashSet exceptionSet, ... object[] args);
+	    // bool IsException(HashSet exceptionSet, ... object[] args);
         // void Project(... object[] args);
     }
 
@@ -16,7 +16,7 @@ namespace NValidate
     {
         public string GetName() => "";
 
-	public bool IsException(HashSet<object> exceptionSet) => false;
+	    public bool IsException(HashSet<object> exceptionSet) => false;
 
         public void Project(Environ environ, Action<Environ> filterAndValidate)
         {
