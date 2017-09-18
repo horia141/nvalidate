@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace NValidate
+namespace NValidate.Attributes
 {
     /// <summary>
     /// Marks a method which performs some validation. Similar to TestAttribute from NUnit.

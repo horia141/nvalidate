@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace NValidate
+namespace NValidate.Attributes
 {
     /// <summary>
     /// Identifies which of the entities produced by a projector should be ignored as exceptions to the "rule".

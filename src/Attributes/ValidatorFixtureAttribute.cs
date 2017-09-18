@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace NValidate
+namespace NValidate.Attributes
 {
     /// <summary>
     /// Marks classes which hold validators. Similar to TestFixtureAttribute from NUnit.

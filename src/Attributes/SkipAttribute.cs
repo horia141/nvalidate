@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace NValidate
+namespace NValidate.Attributes
 {
     /// <summary>
     /// Marks a validation method as needing to be skipped.

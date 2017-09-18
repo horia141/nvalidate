@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NValidate.Attributes;
 using System.Reflection;
 
 namespace NValidate.Tests
