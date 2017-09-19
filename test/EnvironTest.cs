@@ -133,6 +133,30 @@ namespace NValidate.Tests
         }
 
         [Test]
+        public void ExtendShadowsPreviousAssociation()
+        {
+            var environ = new EnvironBuilder()
+                .Add<string>("hello")
+                .Build();
+
+            var newEnviron = environ.Extend<string>("world");
+
+            Assert.That(newEnviron.Get<string>(), Is.EqualTo("world"));
+        }
+
+        [Test]
+        public void ExtendWithAttributeShadowsPreviousAssociation()
+        {
+            var environ = new EnvironBuilder()
+                .Add<OneAttribute, string>("hello")
+                .Build();
+
+            var newEnviron = environ.Extend<OneAttribute, string>("world");
+
+            Assert.That(newEnviron.Get<OneAttribute, string>(), Is.EqualTo("world"));
+        }
+
+        [Test]
         public void ResolveParameters()
         {
             Func<string, int, string> testFn = (string foo, int bar) => $"{foo}-{bar}";
@@ -171,7 +195,77 @@ namespace NValidate.Tests
             Func<string, int, string> testFn = (string foo, int bar) => $"{foo}-{bar}";
             var environ = new EnvironBuilder().Build();
 
-            Assert.That(() => environ.ResolveParameters(testFn.Method.GetParameters()), Throws.Exception.With.Property("Message").EqualTo("Cannot translate parameter \"foo\""));
+            Assert.That(
+                () => environ.ResolveParameters(testFn.Method.GetParameters()),
+                Throws.InstanceOf<CannotFindAssociationException>().With.Property("Message").EqualTo("Cannot translate parameter \"foo\""));
+        }
+
+        [Test]
+        public void DoubleAddFails()
+        {
+            Assert.That(() =>
+                new EnvironBuilder()
+                    .Add<string>("a")
+                    .Add<string>("b")
+                    .Build(),
+                Throws.InstanceOf<AssociationExistsException>());
+            Assert.That(() =>
+                new EnvironBuilder()
+                    .Add<OneAttribute, string>("a")
+                    .Add<OneAttribute, string>("b")
+                    .Build(),
+                Throws.InstanceOf<AssociationExistsException>());
+        }
+
+        [Test]
+        public void DoubleAddExtractorFails()
+        {
+            Assert.That(() =>
+                new EnvironBuilder()
+                    .AddExtractor<string>(env => "foo")
+                    .AddExtractor<string>(env => "bar")
+                    .Build(),
+                Throws.InstanceOf<AssociationExistsException>());
+            Assert.That(() =>
+                new EnvironBuilder()
+                    .AddExtractor<OneAttribute, string>(env => "foo")
+                    .AddExtractor<OneAttribute, string>(env => "bar")
+                    .Build(),
+                Throws.InstanceOf<AssociationExistsException>());
+        }
+
+        [Test]
+        public void DoubleAddAndAddExtractorFails()
+        {
+            Assert.That(() =>
+                new EnvironBuilder()
+                    .Add<string>("foo")
+                    .AddExtractor<string>(env => "bar")
+                    .Build(),
+                Throws.InstanceOf<AssociationExistsException>());
+            Assert.That(() =>
+                new EnvironBuilder()
+                    .Add<OneAttribute, string>("foo")
+                    .AddExtractor<OneAttribute, string>(env => "bar")
+                    .Build(),
+                Throws.InstanceOf<AssociationExistsException>());
+        }
+
+        [Test]
+        public void DoubleAddExtractorAndAddFails()
+        {
+            Assert.That(() =>
+                new EnvironBuilder()
+                    .AddExtractor<string>(env => "foo")
+                    .Add<string>("bar")
+                    .Build(),
+                Throws.InstanceOf<AssociationExistsException>());
+            Assert.That(() =>
+                new EnvironBuilder()
+                    .AddExtractor<OneAttribute, string>(env => "foo")
+                    .Add<OneAttribute, string>("bar")
+                    .Build(),
+                Throws.InstanceOf<AssociationExistsException>());
         }
     }
 }
