@@ -8,13 +8,13 @@ using System.Reflection;
 
 namespace NValidate
 {
-    public class Runner
+    public class ValidationRunner
     {
         DateTime _dateToRun;
         Environ _environ;
 
 
-        public Runner(DateTime dateToRun, Environ environ)
+        public ValidationRunner(DateTime dateToRun, Environ environ)
         {
             _dateToRun = dateToRun;
             _environ = environ;
