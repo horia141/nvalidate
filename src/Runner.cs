@@ -1,3 +1,4 @@
+using NValidate.Attributes;
 using NValidate.Internal;
 using System;
 using System.Collections.Generic;
