@@ -1,96 +1,45 @@
 using NUnit.Framework.Constraints;
-using NValidate.Internal;
-using System.Collections.Generic;
 
 
 namespace NValidate
 {
-    public class CheckRecorder
+    /// <summary>
+    /// Records the results of checks performed inside validators. Checks are expressed as constraints on supplied values.
+    /// </summary>
+    public abstract class CheckRecorder
     {
-        GroupStatus _status;
-        List<CheckResult> _results;
-        bool _shouldRecordEveryCheck;
-
-
-        public CheckRecorder(bool shouldRecordEveryCheck = true)
-        {
-            _status = GroupStatus.Success;
-            _results = shouldRecordEveryCheck ? new List<CheckResult>() : null;
-            _shouldRecordEveryCheck = shouldRecordEveryCheck;
-        }
-
-
-        public void CriticalThat<T>(T del, IResolveConstraint expr) => That(del, expr, null);
-
+        /// <summary>
+        /// Applies the constraint expression <paramref name="expression"/> to the supplied value <paramref name="value"/>.
+        /// If the constraint is met, the success is recorded. Otherwise, the execution of the whole validator instance is stopped.
+        /// </summary>
+        /// <param name="value">A value which is checked by the constraint expression <paramref name="expression"/></param>
+        /// <param name="expression">A <see cref="IResolveConstraint"/> expression which is applied to the value <paramref name="value"/></param>
+        public void CriticalThat<T>(T value, IResolveConstraint expression) => CriticalThat(value, expression, null);
 
         /// <summary>
-        /// Record the result of a applying the expr constraint to del. If the constraint cannot be satisfied, all further checks in the current test
-        /// are abandoned. This will be the last result recorded. Is thread safe.
+        /// Applies the constraint expression <paramref name="expression"/> to the supplied value <paramref name="value"/>.
+        /// If the constraint is met, the success is recorded. Otherwise, the execution of the whole validator instance is stopped.
         /// </summary>
-        public void CriticalThat<T>(T del, IResolveConstraint expr, string description)
-        {
-            var constraint = expr.Resolve();
-            var result = constraint.ApplyTo(del);
-
-            if (result.IsSuccess)
-            {
-                if (_shouldRecordEveryCheck)
-                    _results.Add(new CheckResult()
-                    {
-                        Name = description ?? "",
-                        Status = CheckStatus.Success
-                    });
-            }
-            else
-            {
-                _status = GroupStatus.Failure;
-                if (_shouldRecordEveryCheck)
-                    _results.Add(new CheckResult()
-                    {
-                        Name = description ?? "",
-                        Status = CheckStatus.CriticalFailure
-                    });
-
-                throw new FailedToValidateCriticalCheckException();
-            }
-        }
-
-
-        public void That<T>(T del, IResolveConstraint expr) => That(del, expr, null);
-
+        /// <param name="value">A value which is checked by the constraint expression <paramref name="expression"/></param>
+        /// <param name="expression">A <see cref="IResolveConstraint"/> expression which is applied to the value <paramref name="value"/></param>
+        /// <param name="description">A human-readable description of the check that is performed</param>
+        public abstract void CriticalThat<T>(T value, IResolveConstraint expression, string description);
 
         /// <summary>
-        /// Record the result of applying the expr constraint to del. Does not stop later checks in the test from running. Is thread safe.
+        /// Applies the constraint expression <paramref name="expression"/> to the supplied value <paramref name="value"/>.
+        /// If the constraint is met, the success is recorded. Otherwise, a failure is recorded.
         /// </summary>
-        public void That<T>(T del, IResolveConstraint expr, string description)
-        {
-            var constraint = expr.Resolve();
-            var result = constraint.ApplyTo(del);
+        /// <param name="value">A value which is checked by the constraint expression <paramref name="expression"/></param>
+        /// <param name="expression">A <see cref="IResolveConstraint"/> expression which is applied to the value <paramref name="value"/></param>
+        public void That<T>(T value, IResolveConstraint expression) => That(value, expression, null);
 
-            if (result.IsSuccess)
-            {
-                if (_shouldRecordEveryCheck)
-                    _results.Add(new CheckResult()
-                    {
-                        Name = description ?? "",
-                        Status = CheckStatus.Success
-                    });
-            }
-            else
-            {
-                _status = GroupStatus.Failure;
-                if (_shouldRecordEveryCheck)
-                    _results.Add(new CheckResult()
-                    {
-                        Name = description ?? "",
-                        Status = CheckStatus.Failure
-                    });
-            }
-        }
-
-
-        public bool IsSuccess => _status == GroupStatus.Success;
-        public bool IsFailure => _status == GroupStatus.Failure;
-        public IEnumerable<CheckResult> Results => _results;
+        /// <summary>
+        /// Applies the constraint expression <paramref name="expression"/> to the supplied value <paramref name="value"/>.
+        /// If the constraint is met, the success is recorded. Otherwise, a failure is recorded.
+        /// </summary>
+        /// <param name="value">A value which is checked by the constraint expression <paramref name="expression"/></param>
+        /// <param name="expression">A <see cref="IResolveConstraint"/> expression which is applied to the value <paramref name="value"/></param>
+        /// <param name="description">A human-readable description of the check that is performed</param>
+        public abstract void That<T>(T value, IResolveConstraint expression, string description);
     }
 }

@@ -8,7 +8,7 @@ namespace NValidate.Internal
     /// </summary>
     /// <remarks>
     /// When a runner for an validator instnce checks a constraint defined via a 
-    /// <see cref="CheckRecorder.CriticalThat{T}(T, NUnit.Framework.Constraints.IResolveConstraint)"/> and it fails,
+    /// <see cref="RunnerCheckRecorder.CriticalThat{T}(T, NUnit.Framework.Constraints.IResolveConstraint)"/> and it fails,
     /// this exception is thrown, so the execution of the whole instance is stopped.
     /// </remarks>
     class FailedToValidateCriticalCheckException : Exception

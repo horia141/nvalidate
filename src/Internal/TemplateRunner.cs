@@ -59,7 +59,7 @@ namespace NValidate.Internal
                     if (exceptionsSet != null && projector.IsException(exceptionsSet, env))
                         return;
 
-                    var checkRecorder = new CheckRecorder(validatorTemplateResult.ShouldRecord);
+                    var checkRecorder = new RunnerCheckRecorder(validatorTemplateResult.ShouldRecord);
 
                     try
                     {
