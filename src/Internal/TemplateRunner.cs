@@ -29,6 +29,7 @@ namespace NValidate.Internal
         {
             var validatorTemplateResult = new ValidatorTemplateResult();
             validatorTemplateResult.Name = _validatorTemplateInfo.Name;
+            validatorTemplateResult.ShouldReport = !NoReportingAttribute.HasAttribute(_validatorFixtureInfo) || !NoReportingAttribute.HasAttribute(_validatorTemplateInfo);
             validatorTemplateResult.SummaryAtInstanceLevel = new ResultSummary();
 
             if (SkipAttribute.HasAttribute(_validatorTemplateInfo))
@@ -90,6 +91,7 @@ namespace NValidate.Internal
                         validatorTemplateResult.AddInstanceResult(new ValidatorInstanceResult()
                         {
                             Name = projector.GetName(env),
+                            ShouldReport = validatorTemplateResult.ShouldReport,
                             Status = GroupStatus.Failure,
                             CheckResults = checkRecorder.Results,
                             Error = null
@@ -101,6 +103,7 @@ namespace NValidate.Internal
                         validatorTemplateResult.AddInstanceResult(new ValidatorInstanceResult()
                         {
                             Name = projector.GetName(env),
+                            ShouldReport = validatorTemplateResult.ShouldReport,
                             Status = GroupStatus.Error,
                             CheckResults = null,
                             Error = e.InnerException
@@ -116,16 +119,16 @@ namespace NValidate.Internal
             }));
             environ = environ.Extend(environ); // This is the base environment. It should be accessible downstream.
 
-	    try
-	    {
+            try
+            {
                 projector.Project(environ);
-	    }
-	    catch (TargetInvocationException e) when (e.InnerException is OperationCanceledException)
-	    {
-		// There was an error with executing an instance's code. The possibly parallel
-		// execution of instance validators was stopped. Nothing to do here, as the error
-		// is already saved globally.
-	    }
+            }
+            catch (TargetInvocationException e) when (e.InnerException is OperationCanceledException)
+            {
+                // There was an error with executing an instance's code. The possibly parallel
+                // execution of instance validators was stopped. Nothing to do here, as the error
+                // is already saved globally.
+            }
 
             if (validatorTemplateResult.InstanceResults?.Count == 0 && validatorTemplateResult.Error == null)
                 validatorTemplateResult.Status = GroupStatus.Success;

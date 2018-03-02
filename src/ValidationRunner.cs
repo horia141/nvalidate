@@ -25,6 +25,7 @@ namespace NValidate
             var validatorRunResult = new ValidatorRunResult();
 
             validatorRunResult.RunDate = _dateToRun;
+            validatorRunResult.ShouldReport = true;
             validatorRunResult.SummaryAtFixtureLevel = new ResultSummary();
             validatorRunResult.SummaryAtTemplateLevel = new ResultSummary();
             validatorRunResult.SummaryAtInstanceLevel = new ResultSummary();

@@ -25,6 +25,7 @@ namespace NValidate.Internal
             var validatorFixtureResult = new ValidatorFixtureResult();
 
             validatorFixtureResult.Name = _validatorFixtureInfo.GetCustomAttribute<ValidatorFixtureAttribute>().Name;
+            validatorFixtureResult.ShouldReport = !NoReportingAttribute.HasAttribute(_validatorFixtureInfo);
             validatorFixtureResult.SummaryAtTemplateLevel = new ResultSummary();
             validatorFixtureResult.SummaryAtInstanceLevel = new ResultSummary();
 

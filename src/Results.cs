@@ -1,3 +1,4 @@
+using NValidate.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -135,6 +136,11 @@ namespace NValidate
         public GroupStatus Status { get; set; }
 
         /// <summary>
+        /// Whether this result should be reported according to <see cref="NoReportingAttribute"/>.
+        /// </summary>
+        public bool ShouldReport { get; set; }
+
+        /// <summary>
         /// Summary of the fixtures that were run and their reults.
         /// </summary>
         public ResultSummary SummaryAtFixtureLevel { get; set; }
@@ -201,6 +207,11 @@ namespace NValidate
         /// The status of the fixture. Can be Error if something bad happens at the fixture level.
         /// </summary>
         public GroupStatus Status { get; set; }
+
+        /// <summary>
+        /// Whether this result should be reported according to <see cref="NoReportingAttribute"/>.
+        /// </summary>
+        public bool ShouldReport { get; set; }
 
         /// <summary>
         /// Summary of the templates that were run and their results.
@@ -271,6 +282,11 @@ namespace NValidate
         public GroupStatus Status { get; set; }
 
         /// <summary>
+        /// Whether this result should be reported according to <see cref="NoReportingAttribute"/>.
+        /// </summary>
+        public bool ShouldReport { get; set; }
+
+        /// <summary>
         /// Summary of the instances that were run and their results.
         /// </summary>
         public ResultSummary SummaryAtInstanceLevel { get; set; }
@@ -332,6 +348,12 @@ namespace NValidate
         /// The status of the instance. Can be Error if somethig bad happens during the evaluation.
         /// </summary>
         public GroupStatus Status { get; set; }
+
+        /// <summary>
+        /// Whether this result should be reported according to <see cref="NoReportingAttribute"/>.
+        /// </summary>
+        /// <remarks>This is always true for now.</remarks>
+        public bool ShouldReport { get; set; }
 
         /// <summary>
         /// The set of all checks performed in for the instance. Is null when Status == Error.
