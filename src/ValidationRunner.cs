@@ -40,7 +40,9 @@ namespace NValidate
         /// Perform the validation run, mark of any issues and return issues as well as analytics.
         /// </summary>
         /// <param name="currentAssembly">An assembly to pickup fixtures and templates from</param>
-        /// <returns></returns>
+        /// <returns>
+        /// The details of each validator fixture, template and instance which were checked
+        /// </returns>
         public ValidatorRunResult Run(Assembly currentAssembly)
         {
             var validatorRunResult = new ValidatorRunResult();
