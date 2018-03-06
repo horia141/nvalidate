@@ -64,7 +64,7 @@ namespace NValidate.Internal
 
                     try
                     {
-                        _validatorTemplateInfo.Invoke(validatorFixture, env.Extend(checkRecorder).ResolveParameters(_validatorTemplateInfo.GetParameters()));
+                        _validatorTemplateInfo.Invoke(validatorFixture, env.Extend<CheckRecorder>(checkRecorder).ResolveParameters(_validatorTemplateInfo.GetParameters()));
 
                         if (checkRecorder.IsSuccess)
                         {

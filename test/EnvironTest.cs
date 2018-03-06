@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System;
 
 namespace NValidate.Tests
@@ -8,6 +8,10 @@ namespace NValidate.Tests
 
     [AttributeUsage(AttributeTargets.Parameter)]
     class TwoAttribute : Attribute { }
+
+    class TestBase { }
+
+    class TestDerived : TestBase { }
 
     [TestFixture]
     public class EnvironTest
@@ -99,6 +103,27 @@ namespace NValidate.Tests
         }
 
         [Test]
+        public void GetWithHierarchyFails()
+        {
+            var environ = new EnvironBuilder()
+                .Add(new TestDerived())
+                .Build();
+
+            Assert.That(environ.Get<TestBase>(), Is.Null);
+        }
+
+        [Test]
+        public void GetWithExplicitHierarchyFails()
+        {
+            var derived = new TestDerived();
+            var environ = new EnvironBuilder()
+                .Add<TestBase>(derived)
+                .Build();
+
+            Assert.That(environ.Get<TestBase>(), Is.SameAs(derived));
+        }
+
+        [Test]
         public void Extend()
         {
             var environ = new EnvironBuilder().Build();
@@ -142,6 +167,25 @@ namespace NValidate.Tests
             var newEnviron = environ.Extend<string>("world");
 
             Assert.That(newEnviron.Get<string>(), Is.EqualTo("world"));
+        }
+
+        [Test]
+        public void ExtendWithHierarchyFails()
+        {
+            var environ = new EnvironBuilder().Build();
+            var newEnviron = environ.Extend(new TestDerived());
+
+            Assert.That(newEnviron.Get<TestBase>(), Is.Null);
+        }
+
+        [Test]
+        public void ExtendWithExplicitHierarchyFails()
+        {
+            var derived = new TestDerived();
+            var environ = new EnvironBuilder().Build();
+            var newEnviron = environ.Extend<TestBase>(derived);
+
+            Assert.That(newEnviron.Get<TestBase>(), Is.SameAs(derived));
         }
 
         [Test]

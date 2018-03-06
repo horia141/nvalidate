@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
     <PackageId>NValidate</PackageId>
-    <PackageVersion>1.2.0</PackageVersion>
+    <PackageVersion>1.2.1</PackageVersion>
     <Authors>Horia Coman</Authors>
     <Owners>Horia Coman</Owners>
     <Title>NValidate</Title>
