@@ -6,6 +6,22 @@ using System.Reflection;
 namespace NValidate.Attributes
 {
     /// <summary>
+    /// Describes the way a filter attribute acts.
+    /// </summary>
+    public enum FilterDirection
+    {
+        /// <summary>
+        /// The filter should allow instances which match it
+        /// </summary>
+        Allow,
+
+        /// <summary>
+        /// The filter should block instances which match it
+        /// </summary>
+        Block
+    }
+
+    /// <summary>
     /// Filter the results of a ForEachXAttribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple=true)]
@@ -14,8 +30,9 @@ namespace NValidate.Attributes
         Type _filterInfo;
         MethodInfo _filterMethodInfo;
         Filter _filterObject;
+        FilterDirection _direction;
 
-        public FilterAttribute(Type filterInfo)
+        public FilterAttribute(Type filterInfo, FilterDirection direction = FilterDirection.Allow)
         {
             _filterInfo = filterInfo;
 
@@ -40,12 +57,19 @@ namespace NValidate.Attributes
                 throw new ArgumentException("Filter object is not supposed to have arguments");
 
             _filterObject = (Filter)constructor.Invoke(new object[0]);
+
+            _direction = direction;
         }
 
 
         public bool IsAllowed(Environ environ)
         {
-            return (bool)_filterMethodInfo.Invoke(_filterObject, environ.ResolveParameters(_filterMethodInfo.GetParameters()));
+            var result = (bool)_filterMethodInfo.Invoke(_filterObject, environ.ResolveParameters(_filterMethodInfo.GetParameters()));
+
+            if (_direction == FilterDirection.Allow)
+                return result;
+            else
+                return !result;
         }
     }
 }
